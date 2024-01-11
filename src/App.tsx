@@ -22,26 +22,10 @@ function App() {
         setTasks(tasks.filter(item => item.id !== taskId))
     }
 
-    const [filter, setFilter] = useState<filterModeType>('all')
-
-    function filterTask(filterMode: filterModeType) {
-        setFilter(filterMode)
-    }
-
-    let filteredTask = tasks
-
-    if (filter === 'active') {
-        filteredTask = tasks.filter(item => !item.isDone)
-    }
-
-    if (filter === 'completed') {
-        filteredTask = tasks.filter(item => item.isDone)
-    }
-
 
     return (
         <div className={'App'}>
-            <List title="What to learn" tasks={filteredTask} removeTask={removeTask} filterTask={filterTask}/>
+            <List title="What to learn" tasks={tasks} removeTask={removeTask}/>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, {JSX} from 'react'
+import React, {JSX, useState} from 'react'
 import S from './List.module.css'
 import {Button} from '../button/Button'
 import {filterModeType} from '../../App'
@@ -15,19 +15,40 @@ type ListPropsType = {
     title: string
     tasks: tasksType[]
     removeTask: (taskId: number) => void
-    filterTask: (filterMode: filterModeType) => void
 }
 
 //===============================================================================================================================================================
 
 export const List: React.FC<ListPropsType> = (props) => {
 
+    const [filter, setFilter] = useState<filterModeType>('all')
+
+    function onClickFilterHandlerAll() {
+        setFilter('all')
+    }
+
+    function onClickFilterHandlerActive() {
+        setFilter('active')
+    }
+
+    function onClickFilterHandlerCompleted() {
+        setFilter('completed')
+    }
+
+    let tasksForTodoList: tasksType[] = props.tasks
+    if (filter === 'active') {
+        tasksForTodoList = props.tasks.filter(item => !item.isDone)
+    }
+    if (filter === 'completed') {
+        tasksForTodoList = props.tasks.filter(item => item.isDone)
+    }
+
     const taskItems: JSX.Element =
         (
-            props.tasks.length !== 0
+            tasksForTodoList.length !== 0
                 ? <ul>
                     {
-                        props.tasks.map(item => {
+                        tasksForTodoList.map(item => {
 
                             function onClickHandler() {
                                 props.removeTask(item.id)
@@ -37,7 +58,7 @@ export const List: React.FC<ListPropsType> = (props) => {
                                 <li key={item.id}>
                                     <input type="checkbox" checked={item.isDone} readOnly={true}/>
                                     <span>{item.title}</span>
-                                    <Button onClickCallBack={onClickHandler} text="X"/>
+                                    <Button onClickHandler={onClickHandler}>X</Button>
                                 </li>
                             )
                         })
@@ -46,32 +67,21 @@ export const List: React.FC<ListPropsType> = (props) => {
                 : <span>NO TASKS</span>
         )
 
-    function onClickFilterHandlerAll() {
-        props.filterTask('all')
-    }
-
-    function onClickFilterHandlerActive() {
-        props.filterTask('active')
-    }
-
-    function onClickFilterHandlerCompleted() {
-        props.filterTask('completed')
-    }
-
     return (
         <div className={S.List}>
             <h3>{props.title}</h3>
             <div>
                 <input type="text"/>
-                <Button text="+" onClickCallBack={() => (console.log('123'))}/>
+                <Button onClickHandler={() => {
+                }}>+</Button>
             </div>
 
             {taskItems}
 
             <div>
-                <Button text="All" onClickCallBack={onClickFilterHandlerAll}/>
-                <Button text="Active" onClickCallBack={onClickFilterHandlerActive}/>
-                <Button text="Completed" onClickCallBack={onClickFilterHandlerCompleted}/>
+                <Button onClickHandler={onClickFilterHandlerAll}>All</Button>
+                <Button onClickHandler={onClickFilterHandlerActive}>Active</Button>
+                <Button onClickHandler={onClickFilterHandlerCompleted}>Completed</Button>
             </div>
         </div>
     )

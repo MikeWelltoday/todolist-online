@@ -4,8 +4,8 @@ import S from './Button.module.css'
 //===============================================================================================================================================================
 
 type ButtonPropsType = {
-    text: string
-    onClickCallBack: () => void
+    children: string
+    onClickHandler: () => void
 }
 
 //===============================================================================================================================================================
@@ -13,10 +13,10 @@ type ButtonPropsType = {
 export const Button: React.FC<ButtonPropsType> = (props) => {
 
     function callBack() {
-        props.onClickCallBack()
+        props.onClickHandler()
     }
 
     return (
-        <button className={S.Button} onClick={callBack}>{props.text}</button>
+        <button className={S.Button} onClick={callBack}>{props.children}</button>
     )
 }
