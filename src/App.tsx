@@ -4,6 +4,7 @@ import {List, tasksType} from './components/list/List'
 
 //===============================================================================================================================================================
 
+export type filterModeType = 'all' | 'active' | 'completed'
 
 //===============================================================================================================================================================
 
@@ -17,9 +18,30 @@ function App() {
         {id: 5, title: 'Angular', isDone: false}
     ])
 
+    function removeTask(taskId: number) {
+        setTasks(tasks.filter(item => item.id !== taskId))
+    }
+
+    const [filter, setFilter] = useState<filterModeType>('all')
+
+    function filterTask(filterMode: filterModeType) {
+        setFilter(filterMode)
+    }
+
+    let filteredTask = tasks
+
+    if (filter === 'active') {
+        filteredTask = tasks.filter(item => !item.isDone)
+    }
+
+    if (filter === 'completed') {
+        filteredTask = tasks.filter(item => item.isDone)
+    }
+
+
     return (
         <div className={'App'}>
-            <List title="What to learn" tasks={tasks}/>
+            <List title="What to learn" tasks={filteredTask} removeTask={removeTask} filterTask={filterTask}/>
         </div>
     )
 }
