@@ -1,5 +1,5 @@
 import React, {JSX} from 'react'
-import classes from './List.module.css'
+import S from './List.module.css'
 import {Button} from '../button/Button'
 
 //===============================================================================================================================================================
@@ -37,7 +37,7 @@ export const List: React.FC<ListPropsType> = ({title, tasks}) => {
 
 
     return (
-        <div className={classes.List}>
+        <div className={S.List}>
             <h3>{title}</h3>
             <div>
                 <input type="text"/>
@@ -45,7 +45,7 @@ export const List: React.FC<ListPropsType> = ({title, tasks}) => {
             </div>
 
             {taskItems}
-            
+
             <div>
                 <Button text="All"/>
                 <Button text="Active"/>
