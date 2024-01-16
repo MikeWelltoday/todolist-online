@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
 import './App.css'
-import {List, tasksType} from './components/list/List'
+import {Todolist, tasksType} from './components/list/Todolist'
 
 //===============================================================================================================================================================
 
-export type filterModeType = 'all' | 'active' | 'completed'
 
 //===============================================================================================================================================================
 
@@ -22,10 +21,9 @@ function App() {
         setTasks(tasks.filter(item => item.id !== taskId))
     }
 
-
     return (
         <div className={'App'}>
-            <List title="What to learn" tasks={tasks} removeTask={removeTask}/>
+            <Todolist title="What to learn" tasks={tasks} removeTask={removeTask}/>
         </div>
     )
 }

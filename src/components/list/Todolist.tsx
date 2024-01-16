@@ -1,9 +1,10 @@
 import React, {JSX, useState} from 'react'
-import S from './List.module.css'
+import S from './Todolist.module.css'
 import {Button} from '../button/Button'
-import {filterModeType} from '../../App'
 
 //===============================================================================================================================================================
+
+type filterModeType = 'all' | 'active' | 'completed'
 
 export type tasksType = {
     id: number
@@ -19,7 +20,7 @@ type ListPropsType = {
 
 //===============================================================================================================================================================
 
-export const List: React.FC<ListPropsType> = (props) => {
+export const Todolist: React.FC<ListPropsType> = (props) => {
 
     const [filter, setFilter] = useState<filterModeType>('all')
 
@@ -73,7 +74,8 @@ export const List: React.FC<ListPropsType> = (props) => {
             <div>
                 <input type="text"/>
                 <Button onClickHandler={() => {
-                }}>+</Button>
+                }}
+                >+</Button>
             </div>
 
             {taskItems}
