@@ -5,7 +5,8 @@ import S from './Button.module.css'
 
 type ButtonPropsType = {
     children: string
-    onClickHandler: () => void
+    onClickCallBack: () => void
+    isDisabled?: boolean
 }
 
 //===============================================================================================================================================================
@@ -13,10 +14,13 @@ type ButtonPropsType = {
 export const Button: React.FC<ButtonPropsType> = (props) => {
 
     function callBack() {
-        props.onClickHandler()
+        props.onClickCallBack()
     }
 
     return (
-        <button className={S.Button} onClick={callBack}>{props.children}</button>
+        <button className={S.Button} onClick={callBack} disabled={props.isDisabled}>{props.children}</button>
     )
 }
+
+
+
