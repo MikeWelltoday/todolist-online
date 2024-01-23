@@ -1,8 +1,33 @@
-.List {
+.list {
   background-color: #a8a85d;
   padding: 30px;
   border: 2px solid black;
   border-radius: 25px;
+}
+
+.shorterInputAdvice {
+  max-width: 90%;
+  color: #3c36e8;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 16px;
+  font-style: italic;
+  max-width: 90%;
+}
+
+.errorInput {
+  border: 3px solid red;
+}
+
+
+.filterButtonsBox {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
 }
 
 

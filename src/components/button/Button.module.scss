@@ -2,15 +2,22 @@
   padding: 5px 10px;
   background-color: #61e1b0;
   border: 1px solid orange;
-  border-radius: 5px;
+  border-radius: 3px;
   color: #75124c;
   font-size: 16px;
   font-weight: 500;
-
-  &.active {
-    background-color: #d36f6f;
-    color: white;
-    font-weight: 700;
-  }
+  cursor: pointer;
 }
+
+.filterBtn {
+  background-color: #bfa8c7;
+}
+
+.filterActive {
+  background-color: #d36f6f;
+  color: white;
+  font-weight: 700;
+}
+
+
 

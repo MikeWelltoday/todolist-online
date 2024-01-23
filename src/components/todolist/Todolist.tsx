@@ -1,5 +1,6 @@
 import React, {ChangeEvent, JSX, useState, KeyboardEvent} from 'react'
 import S from './Todolist.module.scss'
+import btnS from './../button/Button.module.scss'
 import {Button} from '../button/Button'
 import {v1} from 'uuid'
 
@@ -24,6 +25,11 @@ type ListPropsType = {
 export const Todolist: React.FC<ListPropsType> = (props) => {
 
     //--------------------------------------------------------------------------------------------------
+    // ### ERROR
+    const [error, setError] = useState<boolean>(false)
+
+
+    //--------------------------------------------------------------------------------------------------
     // ### ADD TASK
     const [taskTitle, setTaskTitle] = useState<string>('')
 
@@ -32,16 +38,18 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
     }
 
     function onClickAddTaskHandler() {
-        props.setTasks([{id: v1(), title: taskTitle, isDone: false}, ...props.tasks])
-        setTaskTitle('')
+        if (taskTitle.trim() !== '') {
+            props.setTasks([{id: v1(), title: taskTitle.trim(), isDone: false}, ...props.tasks])
+            setTaskTitle('')
+        } else {
+            setError(true)
+        }
     }
 
     function onKeyUpAddTaskHandler(event: KeyboardEvent<HTMLInputElement>) {
+        setError(false)
         if (event.key === 'Enter') {
-            if (taskTitle.trim() !== '') {
-                props.setTasks([{id: v1(), title: taskTitle, isDone: false}, ...props.tasks])
-                setTaskTitle('')
-            }
+            onClickAddTaskHandler()
         }
     }
 
@@ -66,23 +74,21 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
     if (filter === 'completed') tasksForTodoList = props.tasks.filter(item => item.isDone)
 
 
-    //--------------------------------------------------------------------------------------------------
-    // ### CHECKBOX CHANGE
-
-
     return (
-        <div className={S.List}>
+        <div className={S.list}>
             <h3>{props.title}</h3>
             <div>
                 <input type="text"
                        value={taskTitle}
                        onChange={onChangeTaskInputHandler}
                        onKeyUp={onKeyUpAddTaskHandler}
+                       className={error ? S.errorInput : ''}
                 />
                 <Button onClickCallBack={onClickAddTaskHandler}
                         isDisabled={taskTitle.trim() === ''}
                 >+</Button>
-                {taskTitle.length >= 20 && <div>shorter name is recommended</div>}
+                {taskTitle.length >= 20 && <p className={S.shorterInputAdvice}>shorter name is recommended</p>}
+                {error && <p className={S.errorMessage}>Field is required</p>}
             </div>
 
             {(
@@ -95,6 +101,7 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
                                     removeTask(item.id)
                                 }
 
+                                // ### CHECKBOX CHANGE
                                 function changeTaskStatus(event: ChangeEvent<HTMLInputElement>) {
                                     props.setTasks([...props.tasks.map(task => {
                                         if (task.id === item.id) task.isDone = event.currentTarget.checked
@@ -120,16 +127,19 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
                     : <span>NO TASKS</span>
             )}
 
-            <div>
+            <div className={S.filterButtonsBox}>
                 <Button
+                    style={btnS.filterBtn}
                     active={filter === 'all'}
                     onClickCallBack={onClickFilterHandler('all')}
                 >All</Button>
                 <Button
+                    style={btnS.filterBtn}
                     active={filter === 'active'}
                     onClickCallBack={onClickFilterHandler('active')}
                 >Active</Button>
                 <Button
+                    style={btnS.filterBtn}
                     active={filter === 'completed'}
                     onClickCallBack={onClickFilterHandler('completed')}
                 >Completed</Button>
