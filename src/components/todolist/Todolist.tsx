@@ -1,11 +1,11 @@
 import React, {ChangeEvent, JSX, useState, KeyboardEvent} from 'react'
-import S from './Todolist.module.css'
+import S from './Todolist.module.scss'
 import {Button} from '../button/Button'
 import {v1} from 'uuid'
 
 //===============================================================================================================================================================
 
-type filterModeType = 'all' | 'active' | 'completed'
+export type filterModeType = 'all' | 'active' | 'completed'
 
 export type tasksType = {
     id: string
@@ -22,24 +22,6 @@ type ListPropsType = {
 //===============================================================================================================================================================
 
 export const Todolist: React.FC<ListPropsType> = (props) => {
-
-    //--------------------------------------------------------------------------------------------------
-    // ### FILTRATION
-    const [filter, setFilter] = useState<filterModeType>('all')
-
-    function onClickFilterHandler(filterValue: filterModeType) {
-        return () => {
-            setFilter(filterValue)
-        }
-    }
-
-    let tasksForTodoList: tasksType[] = props.tasks
-    if (filter === 'active') {
-        tasksForTodoList = props.tasks.filter(item => !item.isDone)
-    }
-    if (filter === 'completed') {
-        tasksForTodoList = props.tasks.filter(item => item.isDone)
-    }
 
     //--------------------------------------------------------------------------------------------------
     // ### ADD TASK
@@ -69,6 +51,24 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
         props.setTasks(props.tasks.filter(item => item.id !== taskId))
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // ### FILTRATION
+    const [filter, setFilter] = useState<filterModeType>('all')
+
+    function onClickFilterHandler(filterValue: filterModeType) {
+        return () => {
+            setFilter(filterValue)
+        }
+    }
+
+    let tasksForTodoList: tasksType[] = props.tasks
+    if (filter === 'active') tasksForTodoList = props.tasks.filter(item => !item.isDone)
+    if (filter === 'completed') tasksForTodoList = props.tasks.filter(item => item.isDone)
+
+
+    //--------------------------------------------------------------------------------------------------
+    // ### CHECKBOX CHANGE
+
 
     return (
         <div className={S.List}>
@@ -82,7 +82,7 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
                 <Button onClickCallBack={onClickAddTaskHandler}
                         isDisabled={taskTitle.trim() === ''}
                 >+</Button>
-                {taskTitle.length >= 15 && <div>shorter name is recommended</div>}
+                {taskTitle.length >= 20 && <div>shorter name is recommended</div>}
             </div>
 
             {(
@@ -95,9 +95,21 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
                                     removeTask(item.id)
                                 }
 
+                                function changeTaskStatus(event: ChangeEvent<HTMLInputElement>) {
+                                    props.setTasks([...props.tasks.map(task => {
+                                        if (task.id === item.id) task.isDone = event.currentTarget.checked
+                                        return task
+                                    })])
+                                }
+
+                                let taskStyle = item.isDone ? S.taskDone : ''
+
                                 return (
-                                    <li key={item.id}>
-                                        <input type="checkbox" checked={item.isDone} readOnly={true}/>
+                                    <li key={item.id} className={taskStyle}>
+                                        <input type="checkbox"
+                                               checked={item.isDone}
+                                               onChange={changeTaskStatus}
+                                        />
                                         <span>{item.title}</span>
                                         <Button onClickCallBack={onClickRemoveTaskHandler}>X</Button>
                                     </li>
@@ -109,9 +121,18 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
             )}
 
             <div>
-                <Button onClickCallBack={onClickFilterHandler('all')}>All</Button>
-                <Button onClickCallBack={onClickFilterHandler('active')}>Active</Button>
-                <Button onClickCallBack={onClickFilterHandler('completed')}>Completed</Button>
+                <Button
+                    active={filter === 'all'}
+                    onClickCallBack={onClickFilterHandler('all')}
+                >All</Button>
+                <Button
+                    active={filter === 'active'}
+                    onClickCallBack={onClickFilterHandler('active')}
+                >Active</Button>
+                <Button
+                    active={filter === 'completed'}
+                    onClickCallBack={onClickFilterHandler('completed')}
+                >Completed</Button>
             </div>
         </div>
     )
