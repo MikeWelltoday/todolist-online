@@ -42,6 +42,7 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
             props.setTasks([{id: v1(), title: taskTitle.trim(), isDone: false}, ...props.tasks])
             setTaskTitle('')
         } else {
+            setTaskTitle('')
             setError(true)
         }
     }
@@ -85,7 +86,7 @@ export const Todolist: React.FC<ListPropsType> = (props) => {
                        className={error ? S.errorInput : ''}
                 />
                 <Button onClickCallBack={onClickAddTaskHandler}
-                        isDisabled={taskTitle.trim() === ''}
+                    // isDisabled={taskTitle.trim() === ''}
                 >+</Button>
                 {taskTitle.length >= 20 && <p className={S.shorterInputAdvice}>shorter name is recommended</p>}
                 {error && <p className={S.errorMessage}>Field is required</p>}
